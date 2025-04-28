@@ -2,13 +2,15 @@ import { useState } from 'react';
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 
-const PriceDropdown = () => {
+const PriceDropdown = ({setPriceRange, priceRange}) => {
   const [toggleDropdown, setToggleDropdown] = useState(true);
 
-  const [selectedPrice, setSelectedPrice] = useState({
-    from: 0,
-    to: 100,
-  });
+  const handleInput = (e) => {
+    setPriceRange({
+      from: Math.floor(e[0]),
+      to: Math.ceil(e[1]),
+    })
+  }
 
   return (
     <div className="bg-white shadow-1 rounded-lg">
@@ -51,11 +53,12 @@ const PriceDropdown = () => {
               id="range-slider-gradient"
               className="margin-lg"
               step={'any'}
+              min={0}
+              max={999}
+              defaultValue={[0, 999]}
+              value={[priceRange.from, priceRange.to]}
               onInput={(e) =>
-                setSelectedPrice({
-                  from: Math.floor(e[0]),
-                  to: Math.ceil(e[1]),
-                })
+                handleInput(e)
               }
             />
 
@@ -65,7 +68,7 @@ const PriceDropdown = () => {
                   $
                 </span>
                 <span id="minAmount" className="block px-3 py-1.5">
-                  {selectedPrice.from}
+                  {priceRange.from}
                 </span>
               </div>
 
@@ -74,7 +77,7 @@ const PriceDropdown = () => {
                   $
                 </span>
                 <span id="maxAmount" className="block px-3 py-1.5">
-                  {selectedPrice.to}
+                  {priceRange.to}
                 </span>
               </div>
             </div>

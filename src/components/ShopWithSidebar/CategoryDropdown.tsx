@@ -2,23 +2,34 @@
 
 import { useState } from "react";
 
-const CategoryItem = ({ category }) => {
+const CategoryItem = ({ category , setCategories, selectedCategories}) => {
   const [selected, setSelected] = useState(false);
+
+  const handleClick = () => {
+    if(!selected){
+      setCategories(prev => [...prev, category.name])
+    }
+    else {
+      setCategories(prev => prev.filter(item => item != category.name))
+    }
+    setSelected(prev => !prev)
+  }
+
   return (
     <button
       className={`${
-        selected && "text-blue"
+        selectedCategories.includes(category) && "text-blue"
       } group flex items-center justify-between ease-out duration-200 hover:text-blue `}
-      onClick={() => setSelected(!selected)}
+      onClick={handleClick}
     >
       <div className="flex items-center gap-2">
         <div
           className={`cursor-pointer flex items-center justify-center rounded w-4 h-4 border ${
-            selected ? "border-blue bg-blue" : "bg-white border-gray-3"
+            selectedCategories.includes(category.name) ? "border-blue bg-blue" : "bg-white border-gray-3"
           }`}
         >
           <svg
-            className={selected ? "block" : "hidden"}
+            className={selectedCategories.includes(category.name) ? "block" : "hidden"}
             width="10"
             height="10"
             viewBox="0 0 10 10"
@@ -34,22 +45,21 @@ const CategoryItem = ({ category }) => {
             />
           </svg>
         </div>
-
         <span>{category.name}</span>
       </div>
 
       <span
         className={`${
-          selected ? "text-white bg-blue" : "bg-gray-2"
+          selectedCategories.includes(category.name) ? "text-white bg-blue" : "bg-gray-2"
         } inline-flex rounded-[30px] text-custom-xs px-2 ease-out duration-200 group-hover:text-white group-hover:bg-blue`}
       >
         {category.products}
       </span>
     </button>
   );
-};
+};  
 
-const CategoryDropdown = ({ categories }) => {
+const CategoryDropdown = ({ categories, setCategories, selectedCategories }) => {
   const [toggleDropdown, setToggleDropdown] = useState(true);
 
   return (
@@ -96,7 +106,7 @@ const CategoryDropdown = ({ categories }) => {
         }`}
       >
         {categories.map((category, key) => (
-          <CategoryItem key={key} category={category} />
+          <CategoryItem key={key} category={category} setCategories={setCategories} selectedCategories={selectedCategories} />
         ))}
       </div>
     </div>

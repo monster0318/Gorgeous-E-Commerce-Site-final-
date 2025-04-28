@@ -116,6 +116,7 @@ const config: Config = {
         "custom-lg": ["22px", "27px"],
         "custom-sm": ["16px", "24px"],
         "custom-xs": ["14px", "16px"],
+        "custom-xxs": ["12px", "14px"],
         "custom-2xl": ["24px", "34px"],
         "custom-4xl": ["36px", "48px"],
         "custom-1": ["22px", "30px"],

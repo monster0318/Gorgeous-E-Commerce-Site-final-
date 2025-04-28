@@ -243,6 +243,7 @@ const config: Config = {
         filter: "0px 1px 0px 0px #E5E7EB",
         list: "1px 0px 0px 0px #E5E7EB",
         input: "inset 0 0 0 2px #3C50E0", 
+        error: "inset 0 0 0 2px #f16363", 
         dropdown: "rgba(151, 48, 255, 0.3) 0px 3px 9px 1px, rgba(51, 148, 255, 0.2) 0px 8px 9px 0px, rgba(51, 48, 255, 0.1) 0px 5px 6px 10px",
         hero: "rgba(151, 48, 255, 0.4) 0px 3px 9px 5px, rgba(51, 148, 255, 0.3) 0px 8px 9px 10px, rgba(51, 48, 255, 0.1) 0px 5px 10px 20px",
         card: "rgba(151, 48, 255, 0.3) 0px 3px 9px 5px, rgba(51, 148, 255, 0.2) 0px 8px 9px 10px, rgba(51, 48, 255, 0.1) 0px 5px 10px 10px",

@@ -98,12 +98,12 @@ const PreviewSliderModal = () => {
       <Swiper ref={sliderRef} slidesPerView={1} spaceBetween={20}>
         <SwiperSlide>
           <div className="flex justify-center items-center">
-            <Image
+            {data.imgs.previews[0] && <Image
               src={data.imgs.previews[0]}
               alt={"product image"}
               width={450}
               height={450}
-            />
+            />}
           </div>
         </SwiperSlide>
       </Swiper>

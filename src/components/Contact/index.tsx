@@ -1,7 +1,61 @@
+'use client'
 import React from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Breadcrumb from "../Common/Breadcrumb";
 
 const Contact = () => {
+  const [name, setName] = useState('');
+  const [mail, setMail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  const [nameState, setNameState] = useState(true)
+  const [mailState, setMailState] = useState(true)
+  const [subjectState, setSubjectState] = useState(true);
+  const [msgState, setMsgState] = useState(true)
+
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if(name.trim() == ''){
+      setNameState(false);
+      return;
+    }
+    if(mail.trim() == ''){
+      setMailState(false);
+      return;
+    }
+    if(subject.trim() == ''){
+      setSubjectState(false);
+      return;
+    }
+    if(message.trim() == ''){
+      setMsgState(false);
+      return;
+    }
+    const data = {name, mail, phone, subject, message}
+    try {
+      const res = await fetch('https://4j3i10z023.execute-api.us-west-1.amazonaws.com/test', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      console.log(res)
+      if (!res.ok) {
+        router.push('/error');
+        throw new Error('Network response was not ok');
+      }
+      router.push('/mail-success');
+    } catch (err) {
+      router.push('/error');
+      console.log(err.message);
+    }
+  }
+
   return (
     <>
       <Breadcrumb title={"Contact"} pages={["contact"]} />
@@ -87,33 +141,37 @@ const Contact = () => {
             </div>
 
             <div className="xl:max-w-[770px] w-full bg-white rounded-xl shadow-1 p-4 sm:p-7.5 xl:p-10">
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                   <div className="w-full">
-                    <label htmlFor="firstName" className="block mb-2.5">
-                      First Name <span className="text-red">*</span>
+                    <label htmlFor="fullname" className="block mb-2.5">
+                      Full Name <span className="text-red">*</span>
                     </label>
 
                     <input
                       type="text"
-                      name="firstName"
-                      id="firstName"
+                      name="fullname"
+                      id="fullname"
+                      value={name}
                       placeholder="Jhon"
-                      className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                      onChange={(e) => {setName(e.target.value), setNameState(true)}}
+                      className={`rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20 ${!nameState && '!shadow-error'}`}
                     />
                   </div>
 
                   <div className="w-full">
-                    <label htmlFor="lastName" className="block mb-2.5">
-                      Last Name <span className="text-red">*</span>
+                    <label htmlFor="email" className="block mb-2.5">
+                      Email Address<span className="text-red">*</span>
                     </label>
 
                     <input
                       type="text"
-                      name="lastName"
-                      id="lastName"
-                      placeholder="Deo"
-                      className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                      name="email"
+                      id="email"
+                      value={mail}
+                      onChange={(e) => {setMail(e.target.value), setMailState(true)}}
+                      placeholder="username@example.com"
+                      className={`rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20 ${!mailState && '!shadow-error'}`}
                     />
                   </div>
                 </div>
@@ -121,15 +179,17 @@ const Contact = () => {
                 <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-5">
                   <div className="w-full">
                     <label htmlFor="subject" className="block mb-2.5">
-                      Subject
+                      Subject<span className="text-red">*</span>
                     </label>
 
                     <input
                       type="text"
                       name="subject"
                       id="subject"
+                      value={subject}
+                      onChange={(e) => {setSubject(e.target.value), setSubjectState(true)}}
                       placeholder="Type your subject"
-                      className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                      className={`rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20 ${!subjectState && '!shadow-error'}`}
                     />
                   </div>
 
@@ -142,6 +202,8 @@ const Contact = () => {
                       type="text"
                       name="phone"
                       id="phone"
+                      value={phone}
+                      onChange={(e) => {setPhone(e.target.value)}}
                       placeholder="Enter your phone"
                       className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                     />
@@ -150,15 +212,17 @@ const Contact = () => {
 
                 <div className="mb-7.5">
                   <label htmlFor="message" className="block mb-2.5">
-                    Message
+                    Message<span className="text-red">*</span>
                   </label>
 
                   <textarea
                     name="message"
                     id="message"
                     rows={5}
+                    value={message}
+                    onChange={(e) => {setMessage(e.target.value), setMsgState(true)}}
                     placeholder="Type your message"
-                    className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full p-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    className={`rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full p-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20 ${!msgState && '!shadow-error' }`}
                   ></textarea>
                 </div>
 
